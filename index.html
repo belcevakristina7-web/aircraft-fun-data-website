@@ -1,0 +1,662 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WORLD OF AIRCRAFT | Aviation Encyclopedia</title>
+<style>
+:root{
+  --bg:#080d16;--panel:#101a2a;--panel2:#142238;
+  --blue:#2474d9;--cyan:#55c7ff;--text:#edf5ff;--muted:#91a5bd;
+  --line:#243750;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+font-family:Arial,Helvetica,sans-serif}
+header{padding:24px 7%;background:#0b1422;border-bottom:1px solid var(--line)}
+.logo{font-size:25px;font-weight:900;letter-spacing:3px}
+.logo span{color:var(--cyan)}
+nav{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px}
+nav a{color:var(--muted);text-decoration:none;font-size:13px}
+nav a:hover{color:var(--cyan)}
+.hero{padding:75px 7%;background:
+linear-gradient(90deg,rgba(8,13,22,.97),rgba(8,13,22,.55)),
+url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1800&q=85') center/cover}
+.hero h1{font-size:clamp(35px,6vw,65px);margin:0 0 15px}
+.hero h1 span{color:var(--cyan)}
+.hero p{max-width:650px;color:#c3d2e5;line-height:1.8}
+.hero-tag{color:var(--cyan);letter-spacing:4px;font-size:12px}
+main{padding:35px 7%}
+.controls{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-bottom:30px}
+input,select{width:100%;padding:15px;background:var(--panel);
+border:1px solid var(--line);border-radius:8px;color:white;outline:none}
+input:focus,select:focus{border-color:var(--cyan)}
+.section-title{margin:42px 0 18px}
+.section-title h2{font-size:25px;margin:0 0 8px}
+.section-title p{color:var(--muted);line-height:1.6;margin:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);
+border-radius:12px;overflow:hidden;cursor:pointer;transition:.2s}
+.card:hover{transform:translateY(-5px);border-color:var(--cyan)}
+.card img{width:100%;height:165px;object-fit:cover;background:#17263b}
+.card-content{padding:17px}
+.category{font-size:10px;letter-spacing:1.5px;color:var(--cyan);text-transform:uppercase}
+.card h3{margin:9px 0;font-size:19px}
+.card p{color:var(--muted);font-size:13px;line-height:1.6;min-height:42px}
+.card small{color:#6f89a5}
+.empty{color:var(--muted);padding:25px 0}
+footer{border-top:1px solid var(--line);padding:30px 7%;
+color:var(--muted);font-size:12px;line-height:1.8}
+.modal{display:none;position:fixed;inset:0;background:#000c;z-index:10;
+overflow-y:auto;padding:25px}
+.modal-box{max-width:850px;margin:30px auto;background:var(--panel);
+border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.modal-img{width:100%;height:340px;object-fit:cover;background:#17263b}
+.modal-content{padding:28px}
+.modal-content h2{font-size:32px;margin:8px 0}
+.modal-content p{color:#bdcde0;line-height:1.85}
+.modal-content h3{color:var(--cyan);margin-top:28px}
+.close{float:right;background:#20344e;color:white;border:0;
+padding:10px 16px;border-radius:6px;cursor:pointer}
+.source{font-size:11px;color:var(--muted)}
+@media(max-width:700px){
+ .controls{grid-template-columns:1fr}
+ .hero{padding:55px 6%}
+ main{padding:25px 5%}
+ .modal-img{height:220px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">WORLD <span>OF AIRCRAFT</span></div>
+  <nav>
+    <a href="#catalog">Aircraft Catalog</a>
+    <a href="#fastest">Fastest Passenger Planes</a>
+    <a href="#business">Business & Private</a>
+    <a href="#bulgaria">Bulgarian Air Force</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-tag">AVIATION KNOWLEDGE DATABASE</div>
+  <h1>THE WORLD OF <span>AIRCRAFT</span></h1>
+  <p>
+    Explore the fascinating world of aviation. Discover passenger aircraft,
+    cargo planes, private jets, military aviation, helicopters and historic
+    aircraft. Every aircraft has its own story.
+  </p>
+</section>
+
+<main id="catalog">
+  <div class="section-title">
+    <h2>Aircraft Encyclopedia</h2>
+    <p>Explore aircraft from different manufacturers, countries and generations.</p>
+  </div>
+
+  <div class="controls">
+    <input id="search" placeholder="Search aircraft, manufacturer or country...">
+    <select id="category">
+      <option value="all">All categories</option>
+      <option>Passenger Aircraft</option>
+      <option>Cargo Aircraft</option>
+      <option>Military Aircraft</option>
+      <option>Helicopters</option>
+      <option>Historic Aircraft</option>
+      <option>Fastest Passenger Planes</option>
+      <option>Business & Private Aircraft</option>
+      <option>Bulgarian Air Force</option>
+      <option>Civilian Drones</option>
+      <option>Military Drones</option>
+    </select>
+    <select id="manufacturer">
+      <option value="all">All manufacturers</option>
+    </select>
+  </div>
+
+  <div id="results" class="grid"></div>
+  <p id="empty" class="empty" hidden>No aircraft found. Try another search.</p>
+
+  <section id="fastest">
+    <div class="section-title">
+      <h2>Fastest Passenger Planes</h2>
+      <p>Aircraft that pushed the limits of commercial aviation speed.</p>
+    </div>
+    <div id="fastest-grid" class="grid"></div>
+  </section>
+
+  <section id="business">
+    <div class="section-title">
+      <h2>Small Business & Private Aircraft</h2>
+      <p>Private jets, business aircraft and versatile personal airplanes.</p>
+    </div>
+    <div id="business-grid" class="grid"></div>
+  </section>
+
+  <section id="bulgaria">
+    <div class="section-title">
+      <h2>Bulgarian Air Force Fleet</h2>
+      <p>
+        An overview of aircraft types associated with the Bulgarian Air Force.
+        The fleet is changing, so individual operational status and quantities
+        should be checked against current official information.
+      </p>
+    </div>
+    <div id="bulgaria-grid" class="grid"></div>
+  </section>
+</main>
+
+<footer>
+  WORLD OF AIRCRAFT | Aviation Encyclopedia<br>
+  Aircraft photographs are retrieved from Wikimedia Commons.
+  Image credits and licensing information are shown in individual profiles.
+  <br>Educational aviation reference project.
+</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <img class="modal-img" id="modal-image" alt="Aircraft photograph">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal()">CLOSE ✕</button>
+      <div class="category" id="modal-category"></div>
+      <h2 id="modal-title"></h2>
+      <p id="modal-description"></p>
+      <h3>Aircraft Overview</h3>
+      <p id="modal-history"></p>
+      <h3>Design and Characteristics</h3>
+      <p id="modal-design"></p>
+      <h3>Role and Operations</h3>
+      <p id="modal-role"></p>
+      <p class="source" id="modal-source"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+const aircraft = [
+{
+name:"Airbus A320-200",maker:"Airbus",country:"France / Europe",
+category:"Passenger Aircraft",year:"1988",
+description:"The Airbus A320 is one of the most recognizable narrow-body passenger aircraft in the world.",
+history:"The A320 entered commercial service in 1988. It introduced important digital flight-control technology to mainstream commercial aviation and became the foundation of a large aircraft family.",
+design:"The aircraft has a twin-engine configuration, a single aisle cabin and a fly-by-wire flight control system. It is designed for short and medium-haul routes.",
+role:"Airlines use the A320 family on domestic, European and international routes. Its versatility has made it a major part of airline fleets worldwide."
+},
+{
+name:"Airbus A321neo",maker:"Airbus",country:"France / Europe",
+category:"Passenger Aircraft",year:"2016",
+description:"The A321neo is a longer member of the A320neo family, designed to carry more passengers efficiently.",
+history:"The A321neo is part of Airbus' updated A320 family. It combines the established A321 airframe with newer engine options and aerodynamic improvements.",
+design:"It features a long narrow-body fuselage, two modern turbofan engines and a single-aisle cabin.",
+role:"It is used on medium-haul routes and on some longer routes where airlines want the capacity of a larger aircraft."
+},
+{
+name:"Airbus A330-300",maker:"Airbus",country:"France / Europe",
+category:"Passenger Aircraft",year:"1994",
+description:"The A330-300 is a wide-body twin-engine aircraft designed for medium and long-distance travel.",
+history:"The A330 family entered service in the 1990s and became a major part of international airline operations.",
+design:"Its wide cabin normally has two aisles. The aircraft uses two large turbofan engines and a conventional low-wing design.",
+role:"It has served airlines on busy international routes and high-capacity regional services."
+},
+{
+name:"Airbus A350-900",maker:"Airbus",country:"France / Europe",
+category:"Passenger Aircraft",year:"2015",
+description:"The A350-900 is a modern long-range wide-body aircraft built with extensive use of advanced materials.",
+history:"The A350 programme was developed to create a new generation of efficient long-haul aircraft.",
+design:"Its structure uses composite materials, and its wings are designed for efficient long-distance flight.",
+role:"Airlines use it on long intercontinental routes."
+},
+{
+name:"Airbus A380-800",maker:"Airbus",country:"France / Europe",
+category:"Passenger Aircraft",year:"2007",
+description:"The A380 is the world's largest passenger airliner to enter regular commercial service.",
+history:"The A380 was developed to carry very large numbers of passengers between major airports. Its first commercial service began in 2007.",
+design:"It has two full-length passenger decks, four engines and a distinctive double-deck fuselage.",
+role:"It is used by airlines on selected high-demand long-haul routes."
+},
+{
+name:"Boeing 737-800",maker:"Boeing",country:"United States",
+category:"Passenger Aircraft",year:"1998",
+description:"The 737-800 became one of the most widely used members of the Boeing 737 Next Generation family.",
+history:"The aircraft entered service in the late 1990s and became popular with airlines around the world.",
+design:"It is a narrow-body twin-engine aircraft with a single passenger aisle.",
+role:"It is commonly used for short and medium-distance airline routes."
+},
+{
+name:"Boeing 737 MAX 8",maker:"Boeing",country:"United States",
+category:"Passenger Aircraft",year:"2017",
+description:"The 737 MAX 8 is a modern version of the Boeing 737 family.",
+history:"The MAX family was developed with updated engines and aerodynamic refinements.",
+design:"It has two high-bypass turbofan engines and a single-aisle passenger cabin.",
+role:"It is used on short and medium-haul routes."
+},
+{
+name:"Boeing 777-300ER",maker:"Boeing",country:"United States",
+category:"Passenger Aircraft",year:"2004",
+description:"The 777-300ER is a long-range wide-body aircraft known for its large capacity.",
+history:"The 777 family became one of the most successful twin-engine wide-body aircraft programmes.",
+design:"It features a long fuselage, two large engines and a wide twin-aisle cabin.",
+role:"It is used on busy long-distance international routes."
+},
+{
+name:"Boeing 787-9 Dreamliner",maker:"Boeing",country:"United States",
+category:"Passenger Aircraft",year:"2014",
+description:"The 787-9 is a long-range aircraft designed around modern materials and passenger comfort.",
+history:"The Dreamliner programme introduced a new generation of composite-intensive commercial aircraft.",
+design:"Its fuselage and wings use extensive composite construction. It is powered by two modern turbofan engines.",
+role:"Airlines use it for long-haul international services."
+},
+{
+name:"Embraer E195-E2",maker:"Embraer",country:"Brazil",
+category:"Passenger Aircraft",year:"2019",
+description:"The E195-E2 is the largest member of Embraer's E2 family of regional passenger jets.",
+history:"The E2 family was developed as an updated generation of Embraer regional aircraft.",
+design:"It features two engines mounted beneath the wings and a modern passenger cabin.",
+role:"It is used on regional and medium-distance routes."
+},
+{
+name:"COMAC C919",maker:"COMAC",country:"China",
+category:"Passenger Aircraft",year:"2023",
+description:"The C919 is a Chinese narrow-body passenger aircraft developed for commercial airline operations.",
+history:"The aircraft was developed by COMAC as part of China's effort to establish a domestic large passenger aircraft industry.",
+design:"It has a conventional twin-engine, single-aisle configuration.",
+role:"It is designed for domestic and regional airline routes."
+},
+{
+name:"Antonov An-124 Ruslan",maker:"Antonov",country:"Ukraine",
+category:"Cargo Aircraft",year:"1986",
+description:"The An-124 is a very large strategic transport aircraft designed to carry oversized cargo.",
+history:"Developed during the Soviet era, it became one of the largest production transport aircraft in the world.",
+design:"It has a high-mounted wing, four engines and a large cargo compartment.",
+role:"It has been used to transport heavy industrial equipment and large cargo."
+},
+{
+name:"Boeing 747-8F",maker:"Boeing",country:"United States",
+category:"Cargo Aircraft",year:"2011",
+description:"The 747-8 Freighter is a large cargo aircraft based on the latest generation of the Boeing 747.",
+history:"It continues the long history of the 747 as an important aircraft in international freight transport.",
+design:"It features four engines, a wide fuselage and a distinctive upper-deck section.",
+role:"It is used for international cargo operations."
+},
+{
+name:"Airbus BelugaXL",maker:"Airbus",country:"Europe",
+category:"Cargo Aircraft",year:"2020",
+description:"The BelugaXL is a specialised transport aircraft designed to carry large aircraft components.",
+history:"Airbus developed it to transport major aircraft parts between production facilities.",
+design:"Its enormous upper fuselage gives it a distinctive shape inspired by the beluga whale.",
+role:"It supports the Airbus manufacturing and assembly network."
+},
+{
+name:"Concorde",maker:"Aérospatiale / BAC",country:"France / United Kingdom",
+category:"Fastest Passenger Planes",year:"1976",
+description:"Concorde was a supersonic passenger aircraft capable of cruising at approximately Mach 2.",
+history:"Developed jointly by British and French companies, Concorde entered airline service in 1976. It became one of the most famous supersonic passenger aircraft in aviation history.",
+design:"It had a slender fuselage, a delta wing and a distinctive drooping nose for improved visibility during certain flight phases.",
+role:"Concorde operated scheduled transatlantic passenger services until its retirement in 2003."
+},
+{
+name:"Tupolev Tu-144",maker:"Tupolev",country:"Soviet Union",
+category:"Fastest Passenger Planes",year:"1968",
+description:"The Tu-144 was a Soviet supersonic passenger aircraft and one of the earliest aircraft of its kind.",
+history:"The Tu-144 made its first flight in 1968. It was developed during the era of intense competition in high-speed aviation.",
+design:"It featured a delta wing and a pointed nose. Its overall appearance was very different from conventional passenger aircraft.",
+role:"It had a short period of passenger service and later served in research and testing programmes."
+},
+{
+name:"Tupolev Tu-144D",maker:"Tupolev",country:"Soviet Union",
+category:"Fastest Passenger Planes",year:"1970s",
+description:"The Tu-144D was an improved development of the original Tu-144 supersonic aircraft.",
+history:"The D version introduced changes intended to improve the aircraft's performance and range.",
+design:"It retained the distinctive supersonic delta-wing design of the Tu-144 family.",
+role:"It is an important part of the history of experimental and supersonic passenger aviation."
+},
+{
+name:"Cessna Citation Longitude",maker:"Textron Aviation",country:"United States",
+category:"Business & Private Aircraft",year:"2019",
+description:"The Citation Longitude is a super-midsize business jet designed for private and corporate travel.",
+history:"It belongs to the Cessna Citation family, which has a long history in business aviation.",
+design:"It has two rear-mounted engines and a spacious cabin designed for business passengers.",
+role:"It is used for private travel, corporate transportation and charter operations."
+},
+{
+name:"Gulfstream G650ER",maker:"Gulfstream",country:"United States",
+category:"Business & Private Aircraft",year:"2014",
+description:"The G650ER is a long-range business jet designed for intercontinental travel.",
+history:"The G650 family became known for combining long range with high-speed business aviation.",
+design:"It has a swept wing, two rear-mounted engines and a large business cabin.",
+role:"It is used by private owners, companies and charter operators."
+},
+{
+name:"Bombardier Global 7500",maker:"Bombardier",country:"Canada",
+category:"Business & Private Aircraft",year:"2018",
+description:"The Global 7500 is an ultra-long-range business aircraft.",
+history:"It was developed as part of Bombardier's Global family of long-range business jets.",
+design:"The aircraft has a long cabin, swept wings and two rear-mounted engines.",
+role:"It is designed for long-distance private and corporate journeys."
+},
+{
+name:"Embraer Phenom 300E",maker:"Embraer",country:"Brazil",
+category:"Business & Private Aircraft",year:"2018",
+description:"The Phenom 300E is a light business jet popular in private aviation.",
+history:"The Phenom family was developed to offer modern business travel in a smaller aircraft.",
+design:"It features two rear-mounted engines and a compact passenger cabin.",
+role:"It is used for private travel, business trips and charter flights."
+},
+{
+name:"Pilatus PC-12",maker:"Pilatus",country:"Switzerland",
+category:"Business & Private Aircraft",year:"1994",
+description:"The PC-12 is a single-engine turboprop aircraft known for its versatility.",
+history:"Pilatus developed the PC-12 as a flexible aircraft capable of serving a wide variety of operators.",
+design:"It has a high wing, a single turboprop engine and a large cabin.",
+role:"It is used for business travel, medical transport, utility work and passenger services."
+},
+{
+name:"Diamond DA50 NG",maker:"Diamond Aircraft",country:"Austria",
+category:"Business & Private Aircraft",year:"2020",
+description:"The DA50 NG is a modern single-engine aircraft designed for private and general aviation.",
+history:"Diamond developed the DA50 as part of its family of modern composite aircraft.",
+design:"It has a low wing, a distinctive cabin and a modern diesel engine.",
+role:"It is intended for private flying and general aviation."
+},
+{
+name:"Cessna 172 Skyhawk",maker:"Textron Aviation",country:"United States",
+category:"Business & Private Aircraft",year:"1956",
+description:"The Cessna 172 is one of the most recognisable light aircraft in aviation history.",
+history:"The Skyhawk first entered production in the 1950s and became widely used for flight training.",
+design:"It has a high wing, fixed landing gear and a four-seat cabin.",
+role:"It is used for flight training, personal travel and recreational flying."
+},
+{
+name:"Lockheed C-130 Hercules",maker:"Lockheed Martin",country:"United States",
+category:"Military Aircraft",year:"1956",
+description:"The C-130 Hercules is a versatile military transport aircraft.",
+history:"The Hercules entered service in the 1950s and has been operated by air forces around the world.",
+design:"It has four turboprop engines, a high wing and a rear cargo ramp.",
+role:"It is used for transport, humanitarian support and many other military and civilian missions."
+},
+{
+name:"Boeing C-17 Globemaster III",maker:"Boeing",country:"United States",
+category:"Military Aircraft",year:"1995",
+description:"The C-17 is a large strategic and tactical military transport aircraft.",
+history:"The aircraft was developed to combine long-distance transport with the ability to operate from a range of airfields.",
+design:"It has four turbofan engines, a high wing and a rear loading ramp.",
+role:"It transports personnel, vehicles and equipment."
+},
+{
+name:"Eurofighter Typhoon",maker:"Eurofighter",country:"Europe",
+category:"Military Aircraft",year:"2003",
+description:"The Typhoon is a twin-engine multirole combat aircraft developed by several European countries.",
+history:"The programme brought together European aerospace companies to create a modern combat aircraft.",
+design:"It has a delta wing, canard foreplanes and two engines.",
+role:"It is operated by several European air forces."
+},
+{
+name:"Dassault Rafale",maker:"Dassault Aviation",country:"France",
+category:"Military Aircraft",year:"2001",
+description:"The Rafale is a French multirole military aircraft.",
+history:"Dassault developed the Rafale for the French armed forces, with versions for land and naval operations.",
+design:"It has a delta wing and canard configuration with two engines.",
+role:"It is used for a wide range of military aviation duties."
+},
+{
+name:"MiG-29 Fulcrum",maker:"Mikoyan",country:"Soviet Union / Russia",
+category:"Military Aircraft",year:"1983",
+description:"The MiG-29 is a twin-engine fighter aircraft developed during the Cold War.",
+history:"It entered service in the 1980s and became one of the best-known Soviet-designed fighter aircraft.",
+design:"It has two engines, a twin-tail arrangement and a distinctive blended wing-body design.",
+role:"It has been operated by numerous air forces, including Bulgaria."
+},
+{
+name:"Sukhoi Su-25 Frogfoot",maker:"Sukhoi",country:"Soviet Union / Russia",
+category:"Military Aircraft",year:"1981",
+description:"The Su-25 is a twin-engine military aircraft designed for close air support roles.",
+history:"The aircraft entered service in the early 1980s and has been used by several countries.",
+design:"It has a straight wing, two engines and a rugged airframe.",
+role:"It has served in military aviation for decades, including with the Bulgarian Air Force."
+},
+{
+name:"C-27J Spartan",maker:"Leonardo",country:"Italy",
+category:"Military Aircraft",year:"2006",
+description:"The C-27J Spartan is a tactical transport aircraft used by military and government operators.",
+history:"It was developed from the earlier G.222 transport aircraft with updated systems and engines.",
+design:"It has a high wing, two turboprop engines and a rear cargo ramp.",
+role:"It is used for transport and humanitarian support. Bulgaria operates the type."
+},
+{
+name:"Aero L-39 Albatros",maker:"Aero Vodochody",country:"Czechoslovakia",
+category:"Military Aircraft",year:"1972",
+description:"The L-39 is a jet trainer aircraft used by air forces and civilian operators.",
+history:"It became one of the most widely recognised jet trainers of its generation.",
+design:"It is a two-seat jet with a straight wing and a compact fuselage.",
+role:"It has been used for pilot training and demonstration flying. Bulgaria has operated L-39 aircraft."
+},
+{
+name:"AS532 Cougar",maker:"Eurocopter / Airbus Helicopters",country:"France",
+category:"Helicopters",year:"1980s",
+description:"The Cougar is a medium transport helicopter developed for military and utility operations.",
+history:"The Cougar family evolved from the earlier Puma helicopter design.",
+design:"It has two engines, a large cabin and a multi-blade main rotor.",
+role:"It is used for transport, search and rescue and other support roles. Bulgarian military aviation has operated Cougar helicopters."
+},
+{
+name:"Bell 206 JetRanger",maker:"Bell",country:"United States",
+category:"Helicopters",year:"1967",
+description:"The Bell 206 is a light helicopter used around the world.",
+history:"The JetRanger became a familiar helicopter in civil and government aviation.",
+design:"It has a compact cabin, a single engine and a two-blade main rotor.",
+role:"It is used for training, observation, transport and general aviation."
+},
+{
+name:"Mi-17",maker:"Mil",country:"Soviet Union / Russia",
+category:"Helicopters",year:"1977",
+description:"The Mi-17 is a medium transport helicopter from the extensive Mi-8 family.",
+history:"The Mi-17 developed from the Mi-8 and has been used by military and civilian operators.",
+design:"It has two engines, a large cabin and a rear loading area.",
+role:"It is used for transport, rescue and utility operations."
+},
+{
+name:"Mi-24 Hind",maker:"Mil",country:"Soviet Union / Russia",
+category:"Helicopters",year:"1972",
+description:"The Mi-24 is a well-known military helicopter with a distinctive large fuselage.",
+history:"It entered service in the 1970s and became one of the most recognisable helicopter designs.",
+design:"It combines a helicopter layout with a large enclosed fuselage and tandem cockpit.",
+role:"It has served in various military aviation roles and has been part of Bulgaria's aviation history."
+},
+{
+name:"Pilatus PC-9M",maker:"Pilatus",country:"Switzerland",
+category:"Bulgarian Air Force",year:"1990s",
+description:"The PC-9M is a turboprop training aircraft used for pilot instruction.",
+history:"The PC-9 family was developed as a modern training aircraft for military and civilian operators.",
+design:"It has a low wing, tandem seating and a turboprop engine.",
+role:"Bulgaria has used PC-9M aircraft for military pilot training."
+},
+{
+name:"L-410 Turbolet",maker:"LET / Aircraft Industries",country:"Czech Republic",
+category:"Bulgarian Air Force",year:"1970s",
+description:"The L-410 is a twin-engine turboprop utility aircraft.",
+history:"It was developed in Czechoslovakia for regional transport and utility operations.",
+design:"It has a high wing, two turboprop engines and a compact cabin.",
+role:"The aircraft has been used for transport and utility duties in Bulgaria."
+},
+{
+name:"Pilatus PC-12 NG",maker:"Pilatus",country:"Switzerland",
+category:"Bulgarian Air Force",year:"2000s",
+description:"The PC-12 NG is a single-engine turboprop aircraft with a flexible cabin.",
+history:"The PC-12 family became popular with government, private and utility operators.",
+design:"It features a high wing and a single turboprop engine.",
+role:"A PC-12 has been associated with Bulgarian Air Force transport and utility operations."
+},
+{
+name:"Zlin Z 242L",maker:"Zlin",country:"Czech Republic",
+category:"Bulgarian Air Force",year:"1990s",
+description:"The Z 242L is a two-seat aerobatic and training aircraft.",
+history:"Zlin has a long history of producing aircraft for training and aerobatic flying.",
+design:"It is a compact low-wing aircraft with two seats.",
+role:"It is used for basic flight training and aerobatic instruction in Bulgaria."
+},
+{
+name:"F-16 Fighting Falcon",maker:"Lockheed Martin",country:"United States",
+category:"Bulgarian Air Force",year:"1978",
+description:"The F-16 is a single-engine multirole aircraft used by many air forces.",
+history:"The F-16 entered service in the late 1970s and became one of the most widely operated combat aircraft in the world.",
+design:"It has a single engine, a bubble canopy and a distinctive blended wing-body design.",
+role:"Bulgaria has acquired F-16 Block 70 aircraft as part of the modernisation of its air force."
+},
+{
+name:"MQ-9 Reaper",maker:"General Atomics",country:"United States",
+category:"Military Drones",year:"2007",
+description:"The MQ-9 is a remotely piloted aircraft used for long-duration observation and other military roles.",
+history:"It developed from the earlier Predator programme and became a prominent example of remotely piloted aviation.",
+design:"It has a long wing, a rear-mounted propeller and a distinctive sensor-equipped nose.",
+role:"It is used in military aviation for surveillance and other specialised missions."
+},
+{
+name:"RQ-4 Global Hawk",maker:"Northrop Grumman",country:"United States",
+category:"Military Drones",year:"2001",
+description:"The RQ-4 is a high-altitude, long-endurance unmanned aircraft.",
+history:"The Global Hawk programme was developed for long-duration aerial observation.",
+design:"It has a very long high-aspect-ratio wing and a streamlined fuselage.",
+role:"It is associated with broad-area observation and information gathering."
+},
+{
+name:"Bayraktar TB2",maker:"Baykar",country:"Türkiye",
+category:"Military Drones",year:"2014",
+description:"The TB2 is a remotely piloted aircraft developed in Türkiye.",
+history:"It became widely known internationally during the 2010s and 2020s.",
+design:"It has a high wing, a rear-mounted propeller and a twin-boom tail.",
+role:"It is a notable example of the growing use of unmanned aircraft in modern military aviation."
+},
+{
+name:"DJI Mini 4 Pro",maker:"DJI",country:"China",
+category:"Civilian Drones",year:"2023",
+description:"The Mini 4 Pro is a compact civilian camera drone.",
+history:"DJI developed the Mini series for users who want a portable aerial camera platform.",
+design:"It has a foldable structure, multiple cameras and a compact electric propulsion system.",
+role:"It is used for photography, video production and recreational aerial imaging, subject to local flight rules."
+},
+{
+name:"DJI Mavic 3",maker:"DJI",country:"China",
+category:"Civilian Drones",year:"2021",
+description:"The Mavic 3 is a foldable camera drone designed for aerial photography.",
+history:"The Mavic family became widely recognised in consumer and professional drone photography.",
+design:"It features folding arms and an integrated camera system.",
+role:"It is used for aerial photography, filmmaking and surveying."
+},
+{
+name:"Parrot ANAFI Ai",maker:"Parrot",country:"France",
+category:"Civilian Drones",year:"2021",
+description:"The ANAFI Ai is a professional compact drone designed for inspection and mapping work.",
+history:"Parrot developed the aircraft for professional users who need aerial imaging and data collection.",
+design:"It has a compact folding frame and an integrated camera system.",
+role:"It is used for inspection, mapping and professional aerial imaging."
+}
+];
+
+const fastest = aircraft.filter(a=>a.category==="Fastest Passenger Planes");
+const business = aircraft.filter(a=>a.category==="Business & Private Aircraft");
+const bulgaria = aircraft.filter(a=>a.category==="Bulgarian Air Force");
+
+const imageCache={};
+
+async function getImage(name){
+  if(imageCache[name])return imageCache[name];
+  const fallback="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80";
+  try{
+    const query=encodeURIComponent(name+" aircraft");
+    const url="https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch="+query+"&gsrnamespace=6&gsrlimit=8&prop=imageinfo&iiprop=url&iiurlwidth=800&format=json&origin=*";
+    const response=await fetch(url);
+    const data=await response.json();
+    const pages=Object.values(data.query?.pages||{});
+    const good=pages.find(p=>p.imageinfo?.[0]?.thumburl);
+    const result=good?.imageinfo?.[0]?.thumburl||fallback;
+    imageCache[name]=result;
+    return result;
+  }catch(e){return fallback}
+}
+
+function cardHTML(a){
+ return `<article class="card" data-name="${a.name}" onclick="openAircraft('${encodeURIComponent(a.name)}')">
+ <img loading="lazy" src="" data-aircraft-image="${a.name}" alt="${a.name}">
+ <div class="card-content">
+ <div class="category">${a.category}</div>
+ <h3>${a.name}</h3>
+ <p>${a.description}</p>
+ <small>${a.maker} · ${a.country}</small>
+ </div></article>`;
+}
+
+function renderGrid(items,target){
+ document.getElementById(target).innerHTML=items.map(cardHTML).join("");
+ loadImages();
+}
+
+function loadImages(){
+ document.querySelectorAll("img[data-aircraft-image]").forEach(async img=>{
+   if(img.dataset.loaded)return;
+   img.dataset.loaded="yes";
+   const name=img.dataset.aircraftImage;
+   img.src=await getImage(name);
+ });
+}
+
+function renderMain(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const cat=document.getElementById("category").value;
+ const maker=document.getElementById("manufacturer").value;
+ const filtered=aircraft.filter(a=>{
+  const matchesText=(a.name+" "+a.maker+" "+a.country+" "+a.description).toLowerCase().includes(q);
+  const matchesCat=cat==="all"||a.category===cat;
+  const matchesMaker=maker==="all"||a.maker===maker;
+  return matchesText&&matchesCat&&matchesMaker;
+ });
+ document.getElementById("results").innerHTML=filtered.map(cardHTML).join("");
+ document.getElementById("empty").hidden=filtered.length>0;
+ loadImages();
+}
+
+function openAircraft(encoded){
+ const name=decodeURIComponent(encoded);
+ const a=aircraft.find(x=>x.name===name);
+ if(!a)return;
+ document.getElementById("modal-category").textContent=a.category+" · "+a.maker;
+ document.getElementById("modal-title").textContent=a.name;
+ document.getElementById("modal-description").textContent=a.description;
+ document.getElementById("modal-history").textContent=a.history;
+ document.getElementById("modal-design").textContent=a.design;
+ document.getElementById("modal-role").textContent=a.role;
+ document.getElementById("modal-source").textContent="Image source: Wikimedia Commons. Image licensing may vary by photograph.";
+ document.getElementById("modal-image").src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=85";
+ getImage(a.name).then(src=>document.getElementById("modal-image").src=src);
+ document.getElementById("modal").style.display="block";
+ document.body.style.overflow="hidden";
+}
+
+function closeModal(){
+ document.getElementById("modal").style.display="none";
+ document.body.style.overflow="auto";
+}
+
+document.getElementById("modal").addEventListener("click",e=>{
+ if(e.target.id==="modal")closeModal();
+});
+
+document.getElementById("search").addEventListener("input",renderMain);
+document.getElementById("category").addEventListener("change",renderMain);
+document.getElementById("manufacturer").addEventListener("change",renderMain);
+
+const makers=[...new Set(aircraft.map(a=>a.maker))].sort();
+makers.forEach(m=>{
+ const option=document.createElement("option");
+ option.value=m;option.textContent=m;
+ document.getElementById("manufacturer").appendChild(option);
+});
+
+renderMain();
+renderGrid(fastest,"fastest-grid");
+renderGrid(business,"business-grid");
+renderGrid(bulgaria,"bulgaria-grid");
+</script>
+</body>
+</html>
